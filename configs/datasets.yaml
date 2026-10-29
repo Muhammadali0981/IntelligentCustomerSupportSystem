@@ -1,0 +1,94 @@
+# Dataset IDs, configs, label mappings, sample sizes and seed.
+# IDs, files and licences checked against the Hugging Face API on 2026-10-28.
+
+seed: 42
+labels: [billing, account_access, technical, shipping, other]
+
+bitext:
+  id: "bitext/Bitext-customer-support-llm-chatbot-training-dataset"
+  split: train
+  licence: CDLA-Sharing-1.0
+  text_column: instruction
+  file: "Bitext_Sample_Customer_Support_Training_Dataset_27K_responses-v11.csv"
+  # Real CSV category names (checked 2026-10-29) differ from the project brief:
+  # CANCEL (= cancellation fee), SHIPPING (= shipping address), SUBSCRIPTION (= newsletter_subscription).
+  map_categories:                    # category -> our label
+    INVOICE: billing
+    PAYMENT: billing
+    REFUND: billing
+    CANCEL: billing                  # only intent: check_cancellation_fee
+    DELIVERY: shipping
+    SHIPPING: shipping               # change_/set_up_shipping_address
+    FEEDBACK: other
+    CONTACT: other
+    SUBSCRIPTION: other              # only intent: newsletter_subscription
+  map_intents:                       # intent -> our label (overrides category)
+    recover_password: account_access
+    registration_problems: account_access
+    switch_account: account_access
+    edit_account: account_access
+    create_account: account_access
+    delete_account: account_access
+    track_order: shipping
+    place_order: other
+    cancel_order: other
+    change_order: other
+  per_intent: 150
+  dedup_cosine: 0.95
+
+tobi_bueck:
+  id: "Tobi-Bueck/customer-support-tickets"
+  licence: CC-BY-NC-4.0
+  # One file only (the files overlap). Newest version, 16,338 English rows.
+  data_file: "aa_dataset-tickets-multi-lang-5-2-50-version.csv"
+  language: en
+  map_queues:
+    "Technical Support": technical
+    "IT Support": technical
+    "Product Support": technical
+    "Service Outages and Maintenance": technical
+    "Billing and Payments": billing
+  # ~1,500 total; billing kept from both sources so "technical" is not just "Tobi-Bueck style".
+  sample_per_label: {technical: 1000, billing: 500}
+  review_rows: 100
+
+classification_split: {train: 0.70, dev: 0.15, test: 0.15}
+
+wixqa:
+  id: "Wix/WixQA"
+  licence: MIT
+  corpus_config: wix_kb_corpus
+  test_configs: [wixqa_expertwritten, wixqa_simulated]
+  dev_config: wixqa_synthetic        # dev/tuning only, never test evidence
+  routing_known_fraction: 0.70
+
+clinc:
+  id: "clinc/clinc_oos"
+  config: plus
+  licence: CC-BY-3.0
+  oos_label: oos
+
+ragbench:
+  id: "galileo-ai/ragbench"
+  configs: [techqa, emanual]
+  licence: CC-BY-4.0
+
+optional:
+  techqa_rag_eval:
+    id: "nvidia/TechQA-RAG-Eval"
+    licence: Apache-2.0
+  banking77:
+    id: "PolyAI/banking77"
+    revision: "refs/convert/parquet"
+    licence: CC-BY-4.0
+  maktek_faqs:
+    id: "MakTek/Customer_support_faqs_dataset"
+    licence: Apache-2.0
+
+synthetic:
+  n_tickets: 500
+  known_fraction: 0.75
+  split: {train: 0.60, dev: 0.20, test: 0.20}
+  review_rows: 50
+
+reasoning_eval_max_new: 200

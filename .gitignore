@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.egg-info/
+
+# Secrets
+.env
+
+# Model caches
+models/cache/
+
+# Vector stores / indexes
+chroma/
+*.chroma/
+data/index/
+
+# Public data (rebuilt by scripts) - keep the folder READMEs
+data/raw/*
+!data/raw/README.md
+data/processed/*
+!data/processed/README.md
+# Review CSVs that contain public-dataset text (rebuilt by the scripts; share outside git)
+data/review/tobi_bueck_label_spotcheck.csv
+data/review/wixqa_category_labels.csv
+
+# LLM call cache
+.cache/
+
+# Run outputs - keep README and committed summary tables
+results/*
+!results/README.md
+!results/tables/
+results/tables/*
+!results/tables/*.md
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

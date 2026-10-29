@@ -1,0 +1,39 @@
+# Pinned to the versions in the home machine's global Python 3.11.8 environment.
+# torch is the CUDA 12.4 build; on a new machine install it first with:
+#   pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+# Then: pip install -r requirements.txt
+# RAGAS/DeepEval are added in Phase 7.
+
+# Core ML
+torch==2.6.0
+transformers==4.57.3
+tokenizers==0.22.1
+sentence-transformers==5.7.0
+accelerate==1.13.0
+numpy==2.0.2
+scipy==1.16.0
+scikit-learn==1.7.1
+
+# Data
+datasets==4.8.4
+huggingface-hub==0.36.0
+pandas==2.3.1
+
+# Retrieval
+chromadb==1.5.9
+rank-bm25==0.2.2
+
+# LLM clients
+ollama==0.6.3
+openai==2.54.0
+
+# Config / validation
+pydantic==2.12.5
+PyYAML==6.0.2
+python-dotenv==1.2.1
+
+# Eval, demo, tests
+matplotlib==3.10.3
+streamlit==1.58.0
+tqdm==4.67.1
+pytest==8.4.1

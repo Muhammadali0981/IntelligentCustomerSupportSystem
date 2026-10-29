@@ -1,0 +1,52 @@
+# Home profile: RTX 3060 Ti (8 GB VRAM, ~0.8 GB used by the desktop), 16 GB RAM, Windows 11.
+# Only ONE LLM on the GPU. Embedder + reranker on CPU at query time.
+
+name: home
+hardware:
+  gpu: "NVIDIA GeForce RTX 3060 Ti"
+  vram_gb: 8
+  ram_gb: 16
+  os: "Windows 11"
+
+ollama:
+  host: "http://localhost:11434"
+  max_loaded_models: 1               # set as OLLAMA_MAX_LOADED_MODELS for the server
+  keep_alive: "5m"                   # interactive use
+  keep_alive_eval: -1                # keep loaded during evaluation runs
+
+# num_ctx chosen from VRAM measured 2026-10-28 (Ollama 0.40.12, `ollama ps` size_vram).
+# Other apps used 0.8-3.6 GB of VRAM during measurement; close games/video before timing runs.
+#   qwen3.5-4b  ctx 4096: 2.92 GiB | 8192: 3.13 | 16384: 3.40 | 32768: 3.83 | 65536: 4.86  (all 100% GPU)
+#   qwen3.5-9b  ctx 4096: 5.22 GiB 100% GPU | 8192: 5.95 GiB 88% GPU | 16384: 6.23 GiB 84% GPU
+routes:
+  fast:
+    model: qwen3.5-4b
+    think: false
+    num_ctx: 8192
+  reasoning:
+    model: qwen3.5-4b
+    think: true
+    num_ctx: 16384
+  reasoning_large:                   # optional, loaded on demand, never timed at home
+    model: qwen3.5-9b
+    think: true
+    num_ctx: 8192                    # ~12% CPU offload with apps open; 4096 fits fully
+    timing_allowed: false
+  judge:                             # provisional at home; final judge is lab gpt-oss-20b
+    model: qwen3.5-9b
+    think: false
+    num_ctx: 8192
+    provisional: true
+
+embedding:
+  model: qwen3-embedding-0.6b
+  query_device: cpu
+  build_device: cuda                 # bulk indexing only, with no LLM loaded
+  batch_size: 32
+
+reranker:
+  model: bge-reranker-v2-m3
+  device: cpu
+
+api_arm:
+  enabled: false

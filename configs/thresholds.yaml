@@ -1,0 +1,22 @@
+# Routing and escalation thresholds. Placeholder values; tuned on dev splits
+# in Phase 5 (routing) and Phase 6 (escalation). Never tuned on test.
+
+routing:
+  similarity_known: 0.80             # stage 1: cosine to nearest known issue
+  llm_match_min_confidence: 0.6      # stage 2: LLM match confidence
+  top_k_candidates: 3
+
+escalation:
+  min_classifier_confidence: 0.5
+  min_top_retrieval_score: 0.3       # reranker score of best chunk
+  escalate_categories: [other]
+  sensitive_topics: [legal, chargeback, fraud, data breach, self-harm, gdpr request]
+
+oos:
+  max_similarity_for_oos: 0.35       # tuned on CLINC150 validation only
+
+retrieval:
+  basic_top_k: 4
+  reasoning_candidates: 30
+  reasoning_top_k: 8
+  rrf_k: 60

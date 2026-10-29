@@ -1,0 +1,48 @@
+# Lab profile: 16 GB university GPU. Configured but not run at home.
+# Used for final timing runs, the gpt-oss-20b reasoning arm and the final LLM judge.
+
+name: lab
+hardware:
+  gpu: "unknown (16 GB)"             # fill in from nvidia-smi on the lab machine
+  vram_gb: 16
+  ram_gb: null
+  os: null
+
+ollama:
+  host: "http://localhost:11434"
+  max_loaded_models: 1
+  keep_alive: "5m"
+  keep_alive_eval: -1
+
+routes:
+  fast:
+    model: qwen3.5-4b
+    think: false
+    num_ctx: 8192
+  reasoning:
+    model: qwen3.5-4b
+    think: true
+    num_ctx: 16384
+  reasoning_large:
+    model: gpt-oss-20b
+    think: "medium"
+    num_ctx: 16384                   # unverified: measure on lab GPU
+    timing_allowed: true
+  judge:
+    model: gpt-oss-20b
+    think: "low"
+    num_ctx: 16384                   # unverified: measure on lab GPU
+    provisional: false
+
+embedding:
+  model: qwen3-embedding-0.6b
+  query_device: cpu
+  build_device: cuda
+  batch_size: 64
+
+reranker:
+  model: bge-reranker-v2-m3
+  device: cpu
+
+api_arm:
+  enabled: false
